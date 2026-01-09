@@ -1,12 +1,16 @@
 import { useState } from "react";
 import axios from "axios";
+import { BASE_URL } from "../config";
+
+
 
 function Register() {
   const [form, setForm] = useState({ name: "", email: "", password: "" });
 
   const handleSubmit = async (e) => {
+    //http://localhost:5000/api/auth/register
     e.preventDefault();
-    await axios.post("http://localhost:5000/api/auth/register", form);
+    await axios.post(`${BASE_URL}/api/auth/register`, form);
     alert("Registered successfully");
   };
 
