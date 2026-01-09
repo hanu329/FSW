@@ -9,8 +9,10 @@ function Register() {
 
   const handleSubmit = async (e) => {
     //http://localhost:5000/api/auth/register
+    //`${BASE_URL}/api/auth/register`
     e.preventDefault();
-    await axios.post(`${BASE_URL}/api/auth/register`, form);
+
+    await axios.post("https://hanum.onrender.com/api/auth/register", form);
     alert("Registered successfully");
   };
 
