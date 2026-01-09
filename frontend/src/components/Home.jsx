@@ -12,7 +12,7 @@ import {  Link } from "react-router-dom";
           <button>Register</button>
         </Link>
 
-        <Link to="/login">
+        <Link to="/signin">
           <button>Login</button>
         </Link>
       </div>
