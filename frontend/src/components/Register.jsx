@@ -12,7 +12,7 @@ function Register() {
     //`${BASE_URL}/api/auth/register`
     e.preventDefault();
 
-    await axios.post("https://hanum.onrender.com/api/auth/register", form);
+    await axios.post(`${BASE_URL}/api/auth/register`, form);
     alert("Registered successfully");
   };
 
