@@ -1,24 +1,49 @@
 const router = require("express").Router();
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
+const multer = require("multer");
+const cloudinary = require("../cloudinary");
 
 // REGISTER
-router.post("/register", async (req, res) => {
+
+
+const upload = multer({ storage: multer.memoryStorage() });
+
+router.post("/register", upload.single("image"), async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
-    const hashed = await bcrypt.hash(password, 10);
+    // Upload image to Cloudinary
+    const result = await new Promise((resolve, reject) => {
+      const stream = cloudinary.uploader.upload_stream(
+        { folder: "profiles" },
+        (error, result) => {
+          if (error) reject(error);
+          else resolve(result);
+        }
+      );
 
-    const user = new User({ name, email, password: hashed });
-    await user.save();
-    console.log("is it working")
+      stream.end(req.file.buffer);
+    });
 
-    res.json({ message: "User registered successfully" });
+    const user = await User.create({
+      name,
+      email,
+      password,
+      avatar: result.secure_url, // image URL
+    });
 
+    res.json({ message: "User registered", user });
   } catch (err) {
-    res.status(400).json({ error: "User already exists" });
+    console.error(err);
+    res.status(500).json({ message: "Register failed" });
   }
 });
+
+
+
+
+
 
 // LOGIN
 router.post("/login", async (req, res) => {
