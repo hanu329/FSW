@@ -3,25 +3,62 @@ import axios from "axios";
 import { BASE_URL } from "../config";
 
 
-
 function Register() {
-  const [form, setForm] = useState({ name: "", email: "", password: "" });
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+
+  const [image, setImage] = useState(null);
 
   const handleSubmit = async (e) => {
-    //http://localhost:5000/api/auth/register
-    //`${BASE_URL}/api/auth/register`
     e.preventDefault();
 
-    await axios.post(`${BASE_URL}/api/auth/register`, form);
-    alert("Registered successfully");
+    const formData = new FormData();
+    formData.append("name", form.name);
+    formData.append("email", form.email);
+    formData.append("password", form.password);
+    formData.append("image", image); // file
+
+    try {
+      await axios.post(`${BASE_URL}/api/auth/register`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      alert("Registered successfully!");
+    } catch (err) {
+      alert("Error registering");
+      console.error(err);
+    }
   };
 
   return (
     <form onSubmit={handleSubmit}>
       <h2>Register</h2>
-      <input placeholder="Name" onChange={e=>setForm({...form, name:e.target.value})} />
-      <input placeholder="Email" onChange={e=>setForm({...form, email:e.target.value})} />
-      <input placeholder="Password" type="password" onChange={e=>setForm({...form, password:e.target.value})} />
+
+      <input
+        placeholder="Name"
+        onChange={(e) => setForm({ ...form, name: e.target.value })}
+      />
+
+      <input
+        placeholder="Email"
+        onChange={(e) => setForm({ ...form, email: e.target.value })}
+      />
+
+      <input
+        placeholder="Password"
+        type="password"
+        onChange={(e) => setForm({ ...form, password: e.target.value })}
+      />
+
+      <input
+        type="file"
+        accept="image/*"
+        onChange={(e) => setImage(e.target.files[0])}
+      />
+
       <button>Register</button>
     </form>
   );
