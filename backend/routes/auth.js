@@ -11,6 +11,9 @@ const upload = multer({ storage: multer.memoryStorage() });
 
 router.post("/register", upload.single("image"), async (req, res) => {
   try {
+
+     console.log("BODY:", req.body);
+    console.log("FILE:", req.file);
     const { name, email, password } = req.body;
 
     // Upload image to Cloudinary
@@ -18,6 +21,7 @@ router.post("/register", upload.single("image"), async (req, res) => {
       const stream = cloudinary.uploader.upload_stream(
         { folder: "profiles" },
         (error, result) => {
+
           if (error) reject(error);
           else resolve(result);
         }
@@ -32,10 +36,10 @@ router.post("/register", upload.single("image"), async (req, res) => {
       password,
       avatar: result.secure_url, // image URL
     });
-
+   console.log("Cloudinary result:", result);
     res.json({ message: "User registered", user });
   } catch (err) {
-    console.error(err);
+    console.error("Server error:", err);
     res.status(500).json({ message: "Register failed" });
   }
 });
