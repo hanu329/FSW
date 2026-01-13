@@ -4,6 +4,9 @@ import { BASE_URL } from "../config";
 import { Local_URL } from "../config";
 
 
+//const API = import.meta.env.BASE_URL || Local_URL;
+
+
 function Register() {
   const [form, setForm] = useState({
     name: "",
@@ -23,7 +26,7 @@ function Register() {
     formData.append("image", image); // file
 
     try {
-      await axios.post(`${Local_URL}/api/auth/register`, formData, {
+      await axios.post(`${BASE_URL}/api/auth/register`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 

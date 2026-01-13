@@ -20,12 +20,16 @@ function Login() {
     // alert(res.data.message);
 
 
-    const res1 = await axios.post(
-  "http://localhost:5000/api/auth/login",
+//     const res1 = await axios.post(
+//   "http://localhost:5000/api/auth/login",
+//   form
+// );
+const res = await axios.post(
+ `${BASE_URL}/api/auth/login`,
   form
 );
 
-localStorage.setItem("token", res1.data.token);
+localStorage.setItem("token", res.data.token);
 navigate("/profile");
 
   };
