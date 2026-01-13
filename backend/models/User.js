@@ -7,7 +7,7 @@
 // });
 
 // module.exports = mongoose.model("User", UserSchema);
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
   name: String,
@@ -16,4 +16,5 @@ const userSchema = new mongoose.Schema({
   avatar: String, // Cloudinary image URL
 });
 
-module.exports = mongoose.model("User", userSchema);
+//module.exports = mongoose.model("User", userSchema);
+export default mongoose.model("User", userSchema);

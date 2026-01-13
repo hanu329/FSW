@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { BASE_URL } from "../config";
+import { Local_URL } from "../config";
 
 
 function Register() {
@@ -22,7 +23,7 @@ function Register() {
     formData.append("image", image); // file
 
     try {
-      await axios.post(`${BASE_URL}/api/auth/register`, formData, {
+      await axios.post(`${Local_URL}/api/auth/register`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
