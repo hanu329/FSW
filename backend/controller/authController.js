@@ -2,9 +2,12 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 
+
 import multer from "multer";
 import cloudinary from "../cloudinary.js";
-const upload = multer({ storage: multer.memoryStorage() });
+const upload = multer({ storage: multer.memoryStorage(),
+                          limits: { fileSize: 1024 * 1024 },
+ });
 
 
 export const register = async (req, res) => {
@@ -13,6 +16,9 @@ export const register = async (req, res) => {
     console.log("FILE:", req.file);
 
     const { name, email, password } = req.body;
+     if (name.length > 30) return res.status(400).json({ message: "Name too long" });
+  if (email.length > 50) return res.status(400).json({ message: "Email too long" });
+   if (password.length > 20) return res.status(400).json({ message: "Password too long" });
 
     const hashed = await bcrypt.hash(password, 10);
 
