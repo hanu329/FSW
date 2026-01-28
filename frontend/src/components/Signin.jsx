@@ -31,17 +31,54 @@ const res = await axios.post(
 
 localStorage.setItem("token", res.data.token);
 navigate("/profile");
-
+<style>
+  
+{`
+  .myinput::placeholder {
+    font-size: 12px;
+    color: #999;
+  }
+`}
+</style>
   };
 
   return (
+     <div style={{position:"absolute", left: "30%", top:"20%",
+       border:"2px solid grey", 
+       borderRadius:"1rem",
+       padding:"2rem",
+      boxShadow:"rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;" 
+    }}>
+      <style>
+
+  
+{`
+
+
+  .myinput::placeholder {
+    font-size: 12px;
+    color: #999;
+  }
+`}
+</style>
     <form onSubmit={handleSubmit}>
-      <h2>Login</h2>
-      <input placeholder="Email" onChange={e=>setForm({...form, email:e.target.value})} />
-      <input placeholder="Password" type="password" onChange={e=>setForm({...form, password:e.target.value})} />
+      <h2 style={{
+        //border:"3px solid teal", 
+     
+        paddingLeft:"3rem", 
+      }}>--Login--</h2>
+      <input placeholder="Email"  onChange={e=>setForm({...form, email:e.target.value}) } 
+       class="myinput"
+       style={{margin:"8px", border:"1px solid grey", borderRadius:"0.5rem",}}/> <br />
+      <input placeholder="Password"   class="myinput" type="password" onChange={e=>setForm({...form, password:e.target.value})}
+       style={{margin:"8px", border:"1px solid grey", borderRadius:"0.5rem",}} /><br />
       <button>Login</button>
     </form>
+
+    </div>
   );
 }
 
 export default Login;
+
+

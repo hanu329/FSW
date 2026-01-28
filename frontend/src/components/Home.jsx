@@ -13,7 +13,16 @@ import {  Link } from "react-router-dom";
         </Link>
 
         <Link to="/signin">
-          <button>Login</button>
+          <button>Login</button> <br />
+        </Link>
+        <Link to="/payment">
+          <button>Pay Now</button>
+        </Link>
+         <Link to="/news">
+          <button>News</button>
+        </Link>
+        <Link to="/ai">
+          <button>Ai agent here</button>
         </Link>
       </div>
     </div>
