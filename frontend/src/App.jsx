@@ -7,6 +7,7 @@ import Demo from "./components/Demo";
 import PaymentButton from "./components/PaymentButton";
 import NewsComponent from "./components/NewsComponent";
 import { AiTool } from "./components/AiTool";
+import ExpenseForm from "./components/ExpenseTrack";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
       <Route path="/register" element={<Register />} />
       <Route path="/signin" element={<Signin />} />
       <Route path="/profile" element={<Profile />} />
+      <Route path="/exp" element={<ExpenseForm />} />
       
         <Route path="/news" element={<NewsComponent />} />
           <Route path="/ai" element={<AiTool />} />
