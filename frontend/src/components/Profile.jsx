@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { BASE_URL } from "../config";
 import { Local_URL } from "../config";
+import Navbar from "./Navbar";
+import ExpenseForm from "./ExpenseTrack";
+
 
 
 function Profile() {
@@ -22,6 +26,13 @@ function Profile() {
 
   return (
    <div>
+     <Navbar />
+     <div style={{margin:"20px"}}></div>
+
+     <Link to="/exp">
+              <button>Expense</button>
+            </Link>
+       <div style={{margin:"20px"}}></div>
   <img  src={user.avatar || "https://via.placeholder.com/150"}  width="150" alt={user.name} />
   <p>Name: {user.name}</p>
   <p>Email: {user.email}</p>

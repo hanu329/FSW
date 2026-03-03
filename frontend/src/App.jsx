@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import Register from "./components/Register";
 import Signin from "./components/Signin";
+import Logout from "./components/Logout";
 import Home from "./components/Home";
 import Profile from "./components/Profile";
 import Demo from "./components/Demo";
@@ -8,10 +9,12 @@ import PaymentButton from "./components/PaymentButton";
 import NewsComponent from "./components/NewsComponent";
 import { AiTool } from "./components/AiTool";
 import ExpenseForm from "./components/ExpenseTrack";
+import SignInRedirect from "./components/SignInRedirect";
 
 function App() {
   return (
     <div className="text-red-500 text-3xl font-bold">
+      
  
 
        <Routes>
@@ -19,7 +22,17 @@ function App() {
       <Route path="/register" element={<Register />} />
       <Route path="/signin" element={<Signin />} />
       <Route path="/profile" element={<Profile />} />
-      <Route path="/exp" element={<ExpenseForm />} />
+       <Route path="/logout" element={<Logout />} />
+      {/* <Route path="/exp" element={<ExpenseForm />} /> */}
+       <Route
+    path="/exp"
+    element={
+      <SignInRedirect>
+        <ExpenseForm />
+      </SignInRedirect>
+    }
+  />
+
       
         <Route path="/news" element={<NewsComponent />} />
           <Route path="/ai" element={<AiTool />} />
