@@ -19,7 +19,24 @@ function Navbar() {
   };
 
   return (
-    <div >
+      // border: 2px solid teal;
+    <div className="parent" >
+       <style>{`
+    .parent{
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+        }
+    `}</style>
+      <div>
+             <Link to="/news">
+          <button>News</button>
+        </Link>
+      </div>
+
+   
 
 
       <div style={{ display: "flex", gap: "20px" }}>
@@ -47,10 +64,6 @@ function Navbar() {
             <button onClick={handleLogout}>Logout</button>
           </>
         )}
-
-        <Link to="/news">
-          <button>News</button>
-        </Link>
 
       </div>
     </div>

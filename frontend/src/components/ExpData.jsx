@@ -29,11 +29,55 @@ const ExpData = () => {
       console.error(error);
     }
   };
+  ////////
+  const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
+const currentMonth = new Date().getMonth() + 1;
+const currentYear = new Date().getFullYear();
+
+let todayTotal = 0;
+let monthTotal = 0;
+let overallTotal = 0;
+
+expenses.forEach((exp) => {
+  const expDate = new Date(exp.date);
+  const expMonth = expDate.getMonth() + 1;
+  const expYear = expDate.getFullYear();
+
+  overallTotal += Number(exp.amount);
+
+  if (exp.date === today) {
+    todayTotal += Number(exp.amount);
+  }
+
+  if (expMonth === currentMonth && expYear === currentYear) {
+    monthTotal += Number(exp.amount);
+  }
+});
+////
 
   return (
     <div>
-      <h2>My Expenses</h2>
-
+         <style>{`
+      th, td {
+        margin-left: 30px;
+        padding: 10px;
+      }
+        p{
+        margin: 10px;
+        color:teal
+        }
+        h2{
+        font-size:25px;
+        margin-left:10rem;
+        color:yellow
+        }
+    `}</style>
+      <h2> Expenses So Far!</h2>
+<p>
+  <b>This day:</b> {todayTotal} &nbsp; | &nbsp;
+  <b>This month:</b> {monthTotal} &nbsp; | &nbsp;
+  <b>Total till now:</b> {overallTotal}
+</p>
       <table border="1" cellPadding="10">
         <thead>
           <tr>
