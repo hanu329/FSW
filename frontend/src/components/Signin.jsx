@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { BASE_URL } from "../config";
 import { Local_URL } from "../config";
@@ -74,6 +74,10 @@ navigate("/profile");
        style={{margin:"8px", border:"1px solid grey", borderRadius:"0.5rem",}} /><br />
       <button>Login</button>
     </form>
+
+      <Link to="/register">
+              Register first!
+            </Link>
 
     </div>
   );

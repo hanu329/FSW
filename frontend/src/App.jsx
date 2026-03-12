@@ -10,6 +10,7 @@ import NewsComponent from "./components/NewsComponent";
 import { AiTool } from "./components/AiTool";
 import ExpenseForm from "./components/ExpenseTrack";
 import SignInRedirect from "./components/SignInRedirect";
+import ExpData from "./components/ExpData";
 
 function App() {
   return (
@@ -32,9 +33,12 @@ function App() {
       </SignInRedirect>
     }
   />
+  
+        <Route path="/expdata" element={<ExpData />} />
 
       
         <Route path="/news" element={<NewsComponent />} />
+       
           <Route path="/ai" element={<AiTool />} />
          <Route path="/payment" element={<PaymentButton />} />
          <Route path="/d" element={<Demo />} />

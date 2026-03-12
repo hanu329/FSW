@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import Navbar from "./Navbar";
+import { Link } from "react-router-dom";
+
 
 const ExpenseForm = () => {
   const [expenses, setExpenses] = useState([]);
@@ -63,8 +66,8 @@ const ExpenseForm = () => {
     setFlag(1)
   const token = localStorage.getItem("token");
 
-
-  await fetch("http://localhost:5000/api/expenses", {
+//"http://localhost:5000/api/expenses"
+  await fetch(`${BASE_URL}/api/expenses`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -77,6 +80,13 @@ const ExpenseForm = () => {
 
 return (
   <div style={{ padding: "20px", maxWidth: "1200px", margin: "auto" }}>
+
+    <Navbar />
+    
+          <Link to="/expdata">
+                  previous expenses
+                </Link>
+  
     <button
       onClick={addExpenseField}
       style={{
