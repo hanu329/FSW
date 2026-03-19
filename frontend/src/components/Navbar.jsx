@@ -28,8 +28,15 @@ function Navbar() {
   justify-content: space-between;
   align-items: center;
   padding: 10px;
+  
         }
+  span{
+  color:teal
+  
+  }
+ 
     `}</style>
+    
       <div>
              <Link to="/news">
           <button>News</button>
@@ -40,28 +47,31 @@ function Navbar() {
 
 
       <div style={{ display: "flex", gap: "20px" }}>
+        <Link to="/">
+          <span>Home</span>
+        </Link>
+      
 
         {!isLoggedIn && (
           <>
             <Link to="/register">
-              <button>Register</button>
+            Register
             </Link>
 
             <Link to="/signin">
-              <button>Login</button>
+             Login
             </Link>
-
-            <Link to="/exp">
+{/*  <Link to="/exp">
               <button>Expense</button>
-            </Link>
+            </Link> */}
           </>
         )}
+        <span>about</span>
+        <span>contact us</span>
 
         {isLoggedIn && (
           <>
-            
-
-            <button onClick={handleLogout}>Logout</button>
+            <span onClick={handleLogout}>Logout</span>
           </>
         )}
 

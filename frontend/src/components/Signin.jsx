@@ -8,11 +8,13 @@ import { Local_URL } from "../config";
 
 function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
+   const [lgText, setlgText] = useState("login");
   
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setlgText("wait...")
     // const res = await axios.post(`${Local_URL}/api/auth/login`, form);
     // console.log("tokendata: ", res.data.token);
     // localStorage.setItem("token", res.data.token);
@@ -72,7 +74,7 @@ navigate("/profile");
        style={{margin:"8px", border:"1px solid grey", borderRadius:"0.5rem",}}/> <br />
       <input placeholder="Password"   class="myinput" type="password" onChange={e=>setForm({...form, password:e.target.value})}
        style={{margin:"8px", border:"1px solid grey", borderRadius:"0.5rem",}} /><br />
-      <button>Login</button>
+      <button>{lgText}</button>
     </form>
 
       <Link to="/register">
