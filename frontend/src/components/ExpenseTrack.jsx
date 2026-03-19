@@ -7,26 +7,41 @@ import { Local_URL } from "../config";
 
 
 const ExpenseForm = () => {
-  const [expenses, setExpenses] = useState([]);
+  const [expenses, setExpenses] = useState([ {
+        name: "na",
+        amount: "",
+        date: "",
+        hour: "12",
+        minute: "00",
+        period: "AM",
+        location: "na",
+        shop: "na",
+        added: false,
+        isEditing: true
+      }]);
   let [flag, setFlag] = useState(0)
+  const [t, setText]=useState("add expense")
+  const today = new Date().toISOString().split("T")[0];
 
   const addExpenseField = () => {
     setExpenses([
       ...expenses,
       {
-        name: "",
+        name: "na",
         amount: "",
         date: "",
-        hour: "01",
+        hour: "12",
         minute: "00",
         period: "AM",
-        location: "",
-        shop: "",
+        location: "na",
+        shop: "na",
         added: false,
         isEditing: true,
       },
     ]);
+     setText("Add More Expenses")
   };
+  
 
   const handleChange = (index, event) => {
     const values = [...expenses];
@@ -99,7 +114,7 @@ return (
         cursor: "pointer",
       }}
     >
-      Add Expense
+     {t}
     </button>
 
     {expenses.map((expense, index) => (
@@ -143,7 +158,7 @@ return (
           <input
             type="date"
             name="date"
-            value={expense.date}
+            value={expense.date || today}
             onChange={(e) => handleChange(index, e)}
             disabled={!expense.isEditing}
             style={{ padding: "8px" }}
@@ -194,7 +209,7 @@ return (
             value={expense.period}
             onChange={(e) => handleChange(index, e)}
             disabled={!expense.isEditing}
-            style={{ padding: "8px" }}
+            style={{ padding: "8px" , background:"grey"}}
           >
             <option>AM</option>
             <option>PM</option>
@@ -269,6 +284,7 @@ return (
           >
             {flag==1 ? "Saved" : "Save"}
           </button>
+          
 
 
   </div>

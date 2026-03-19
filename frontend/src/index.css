@@ -23,7 +23,7 @@ a {
   text-decoration: inherit;
 }
 a:hover {
-  color: yellow;
+  color: grey;
 }
 
 body {
@@ -49,7 +49,7 @@ button {
   transition: border-color 0.25s;
 }
 button:hover {
-  border-color: red;
+  border-color: black;
 }
 button:focus,
 button:focus-visible {

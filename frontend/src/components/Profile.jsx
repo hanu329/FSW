@@ -26,7 +26,7 @@ function Profile() {
 
   return (
    <div>
-     <Navbar />
+     <Navbar  />
      <div style={{margin:"20px"}}></div>
 
      <Link to="/exp">

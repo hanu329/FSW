@@ -10,6 +10,13 @@ function Home() {
      <Link to="/expdata">
                   previous expenses
                 </Link>
+                <button style={{margin:"10px"}}>
+                   <Link to="/exp">
+                  new expenses
+                </Link>
+
+                </button>
+                
       <h1>Welcome</h1>
     </div>
   );

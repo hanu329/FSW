@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 import { BASE_URL } from "../config";
 import { Local_URL } from "../config";
@@ -54,6 +55,15 @@ expenses.forEach((exp) => {
   }
 });
 ////
+const groupedExpenses = expenses
+  .sort((a, b) => new Date(a.date) - new Date(b.date)) // sort by date
+  .reduce((acc, curr) => {
+    if (!acc[curr.date]) {
+      acc[curr.date] = [];
+    }
+    acc[curr.date].push(curr);
+    return acc;
+  }, {});
 
   return (
     <div>
@@ -78,32 +88,57 @@ expenses.forEach((exp) => {
   <b>This month:</b> {monthTotal} &nbsp; | &nbsp;
   <b>Total till now:</b> {overallTotal}
 </p>
-      <table border="1" cellPadding="10">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Amount</th>
-            <th>Date</th>
-            <th>Time</th>
-            <th>Location</th>
-            <th>Shop</th>
+
+<table border="1" cellPadding="10">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Amount</th>
+      <th>Date</th>
+      <th>Time</th>
+      <th>Location</th>
+      <th>Shop</th>
+    </tr>
+  </thead>
+
+  <tbody>
+  {Object.entries(groupedExpenses).map(([date, exps]) => {
+    const total = exps.reduce(
+      (sum, item) => sum + Number(item.amount),
+      0
+    );
+
+    return (
+      <React.Fragment key={date}>
+        {exps.map((exp) => (
+          <tr key={exp._id}>
+            <td>{exp.name}</td>
+            <td>{exp.amount}</td>
+            <td>{exp.date}</td>
+            <td>{exp.hour}:{exp.minute} {exp.period}</td>
+            <td>{exp.location}</td>
+            <td>{exp.shop}</td>
           </tr>
-        </thead>
+        ))}
 
-        <tbody>
-          {expenses.map((exp) => (
-            <tr key={exp._id}>
-              <td>{exp.name}</td>
-              <td>{exp.amount}</td>
-              <td>{exp.date}</td>
-              <td>{exp.hour}:{exp.minute} {exp.period}</td>
-              <td>{exp.location}</td>
-              <td>{exp.shop}</td>
-            </tr>
-          ))}
-        </tbody>
-
-      </table>
+        {/* Total Row */}
+        <tr>
+          <td colSpan="6" style={{ fontWeight: "bold", background: "grey" }}>
+           <span style={{marginLeft:"15rem"}}> Total : ₹{total}</span>
+          </td>
+        </tr>
+      </React.Fragment>
+    );
+  })}
+</tbody>
+</table>
+<div>
+   <button style={{margin:"10px"}}>
+                   <Link to="/exp">
+                 add new expenses
+                </Link>
+                </button>
+</div>
     </div>
   );
 };
