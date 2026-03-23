@@ -32,7 +32,7 @@ const res = await axios.post(
 );
 
 localStorage.setItem("token", res.data.token);
-navigate("/profile");
+navigate("/");
 <style>
   
 {`

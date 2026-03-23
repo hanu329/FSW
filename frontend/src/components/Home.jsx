@@ -1,4 +1,5 @@
 import ExpData from "./ExpData";
+import Footer from "./Footer";
 import Navbar from "./Navbar";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -7,15 +8,15 @@ function Home() {
     // border:"2px solid red"
     <div style={{margin:"0px", padding: "0px"}}>
       <Navbar />
-     <Link to="/expdata">
+     {/* <Link to="/expdata">
                   previous expenses
                 </Link>
-                <button style={{margin:"10px"}}>
+                <span style={{margin:"10px"}}>
                    <Link to="/exp">
                   new expenses
                 </Link>
 
-                </button>
+                </span> */}
                   <div style={styles.container}>
                        <style>{`
                     .btnlft{
@@ -85,6 +86,7 @@ function Home() {
                       </div>
                 
                     </div>
+                    <Footer />
     
     </div>
   );

@@ -17,7 +17,7 @@ const ExpData = () => {
 
       const token = localStorage.getItem("token");
    
-      const res = await fetch(`${BASE_URL}/api/expenses`, {
+      const res = await fetch(`${Local_URL}/api/expenses`, {
         headers: {
           "Authorization": `Bearer ${token}`
         }
@@ -78,8 +78,8 @@ const groupedExpenses = expenses
         }
         h2{
         font-size:25px;
-        margin-left:10rem;
-        color:yellow
+        margin-left:5rem;
+        color:red
         }
     `}</style>
       <h2> Expenses So Far!</h2>
@@ -102,36 +102,85 @@ const groupedExpenses = expenses
   </thead>
 
   <tbody>
-  {Object.entries(groupedExpenses).map(([date, exps]) => {
-    const total = exps.reduce(
-      (sum, item) => sum + Number(item.amount),
-      0
-    );
+  {(() => {
+    let weekTotal = 0;
+    let prevWeek = null;
 
-    return (
-      <React.Fragment key={date}>
-        {exps.map((exp) => (
-          <tr key={exp._id}>
-            <td>{exp.name}</td>
-            <td>{exp.amount}</td>
-            <td>{exp.date}</td>
-            <td>{exp.hour}:{exp.minute} {exp.period}</td>
-            <td>{exp.location}</td>
-            <td>{exp.shop}</td>
+    return Object.entries(groupedExpenses).map(([date, exps], index, arr) => {
+      const currentDate = new Date(date);
+
+      // Week number logic (simple)
+      const getWeek = (d) => {
+        const firstDay = new Date(d.getFullYear(), 0, 1);
+        const pastDays = Math.floor((d - firstDay) / 86400000);
+        return Math.ceil((pastDays + firstDay.getDay() + 1) / 7);
+      };
+
+      const currentWeek = getWeek(currentDate);
+
+      // Daily total
+      const dailyTotal = exps.reduce(
+        (sum, item) => sum + Number(item.amount),
+        0
+      );
+
+      weekTotal += dailyTotal;
+
+      let showWeekTotal = false;
+
+      // Check next date's week
+      if (index === arr.length - 1) {
+        showWeekTotal = true; // last item
+      } else {
+        const nextDate = new Date(arr[index + 1][0]);
+        const nextWeek = getWeek(nextDate);
+
+        if (currentWeek !== nextWeek) {
+          showWeekTotal = true;
+        }
+      }
+
+      return (
+        <React.Fragment key={date}>
+          {/* Rows */}
+          {exps.map((exp) => (
+            <tr key={exp._id}>
+              <td>{exp.name}</td>
+              <td>{exp.amount}</td>
+              <td>{exp.date}</td>
+              <td>{exp.hour}:{exp.minute} {exp.period}</td>
+              <td>{exp.location}</td>
+              <td>{exp.shop}</td>
+            </tr>
+          ))}
+
+          {/* Daily Total */}
+          <tr>
+            <td colSpan="6" style={{ fontWeight: "bold", background: "grey" }}>
+              <span style={{ marginLeft: "15rem" }}>
+                Day Total : ₹{dailyTotal}
+              </span>
+            </td>
           </tr>
-        ))}
 
-        {/* Total Row */}
-        <tr>
-          <td colSpan="6" style={{ fontWeight: "bold", background: "grey" }}>
-           <span style={{marginLeft:"15rem"}}> Total : ₹{total}</span>
-          </td>
-        </tr>
-      </React.Fragment>
-    );
-  })}
-</tbody>
-</table>
+          {/* ✅ Week Total */}
+          {showWeekTotal && (
+            <tr>
+              <td colSpan="6" style={{ fontWeight: "bold", background: "black", color: "white" }}>
+                <span style={{ marginLeft: "15rem" }}>
+                  Week Total : ₹{weekTotal}
+                </span>
+              </td>
+            </tr>
+          )}
+
+          {/* Reset after printing */}
+          {showWeekTotal && (weekTotal = 0)}
+        </React.Fragment>
+      );
+    });
+  })()}
+</tbody></table>
 <div>
    <button style={{margin:"10px"}}>
                    <Link to="/exp">

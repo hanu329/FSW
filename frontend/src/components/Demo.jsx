@@ -1,115 +1,33 @@
-import {  Link } from "react-router-dom";
-
-import React from "react";
+import React, { useState } from "react";
+import "./style/navbar.css";
 
 const Demo = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
+
   return (
-    <div style={styles.container}>
-       <style>{`
-    .btnlft{
-    margin-left:3rem;
-    color:white
+    <nav className="navbar">
+      <div className="logo">MyApp</div>
 
-    }
-    button{
-    color:white
-    }
- 
-    `}</style>
-      
-      {/* News Card */}
-      <div style={styles.card}>
-        <img
-          src="https://source.unsplash.com/200x200/?news"
-          alt="News"
-          style={styles.image}
-        />
-        <h3>News</h3>
-        <p>Stay updated with the latest headlines around the world.</p>
-        <button style={styles.button}>Explore</button>
+      {/* Hamburger Icon */}
+      <div className={`hamburger ${isOpen ? "active" : ""}`} onClick={toggleMenu}>
+        <span></span>
+        <span></span>
+        <span></span>
       </div>
 
-      {/* Expense Tracker Card */}
-      <div style={styles.card}>
-        <img
-          src="https://source.unsplash.com/200x200/?money"
-          alt="Expense"
-          style={styles.image}
-        />
-        <h3>Expense Tracker</h3>
-        <p>Track your daily spending and manage your budget easily.</p>
-        <Link to="/exp">
-        <button style={styles.button}>Add++</button> 
-        </Link>
-        <Link to="/expdata">
-        
-          <button style={styles.button} className="btnlft">Track</button>
-        </Link>
-        
-      </div>
-
-      {/* Todos Card */}
-      <div style={styles.card}>
-        <img
-          src="https://source.unsplash.com/200x200/?task"
-          alt="Todos"
-          style={styles.image}
-        />
-        <h3>Todos</h3>
-        <p>Create and manage your daily tasks efficiently.</p>
-        <button style={styles.button}>View Tasks</button>
-      </div>
-
-      {/* Services Card */}
-      <div style={styles.card}>
-        <img
-          src="https://source.unsplash.com/200x200/?services"
-          alt="Services"
-          style={styles.image}
-        />
-        <h3>Other Services</h3>
-        <p>Explore additional tools and features available.</p>
-        <button style={styles.button}>Check Now</button>
-      </div>
-
-    </div>
+      {/* Menu */}
+      <ul className={`nav-links ${isOpen ? "open" : ""}`}>
+        <li><a href="/">Home</a></li>
+        <li><a href="/">About</a></li>
+        <li><a href="/">Services</a></li>
+        <li><a href="/">Contact</a></li>
+      </ul>
+    </nav>
   );
 };
 
-const styles = {
-  container: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-    gap: "20px",
-    padding: "20px",
-  },
-  card: {
-   // background: "#fff",
-    borderRadius: "15px",
-    padding: "20px",
-    textAlign: "center",
-    boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
-    transition: "0.3s",
-    cursor: "pointer",
-  },
-  image: {
-    width: "100px",
-    height: "100px",
-    objectFit: "cover",
-    marginBottom: "10px",
-  },
-  button: {
-    marginTop: "10px",
-    padding: "8px 12px",
-    border: "none",
-    borderRadius: "8px",
-    background: "#007bff",
-    //color: "#fff",
-    cursor: "pointer",
-  },
-};
-
 export default Demo;
-
-
-  
