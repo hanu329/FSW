@@ -17,7 +17,7 @@ const ExpData = () => {
 
       const token = localStorage.getItem("token");
    
-      const res = await fetch(`${Local_URL}/api/expenses`, {
+      const res = await fetch(`${BASE_URL}/api/expenses`, {
         headers: {
           "Authorization": `Bearer ${token}`
         }
