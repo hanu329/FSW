@@ -19,7 +19,7 @@
 
 a {
   font-weight: 500;
-  color: teal;
+  /* color: teal; */
   text-decoration: inherit;
 }
 a:hover {

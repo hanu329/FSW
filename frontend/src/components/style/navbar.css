@@ -1,5 +1,5 @@
 /* Reset */
-* {
+/* * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -20,7 +20,7 @@
 }
 
 /* Nav Links */
-.nav-links {
+/*.nav-links {
   display: flex;
   list-style: none;
 }
@@ -40,6 +40,7 @@
 }
 
 /* Hamburger */
+/*
 .hamburger {
   display: none;
   flex-direction: column;
@@ -55,6 +56,7 @@
 }
 
 /* Animation */
+/*
 .hamburger.active span:nth-child(1) {
   transform: rotate(45deg) translate(5px, 5px);
 }
@@ -68,6 +70,7 @@
 }
 
 /* Mobile */
+/*
 @media (max-width: 768px) {
   .hamburger {
     display: flex;
@@ -93,3 +96,84 @@
     text-align: center;
   }
 }
+
+ 
+ 
+////// */
+
+        .parent {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 10px;
+          position: relative;
+        
+      
+        }
+      
+
+        span {
+         
+          cursor: pointer;
+        }
+
+        .nav-links {
+          display: flex;
+          gap: 20px;
+        }
+
+        /* Hamburger */
+        .hamburger {
+          display: none;
+        
+          flex-direction: column;
+          cursor: pointer;
+        }
+
+        .hamburger span {
+          width: 25px;
+         
+          height: 3px;
+         
+          margin: 4px;
+          transition: 0.3s;
+        }
+
+        /* Animation */
+        .hamburger.active span:nth-child(1) {
+          transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+          opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+          transform: rotate(-45deg) translate(6px, -6px);
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+          .hamburger {
+            display: flex;
+          }
+
+          .nav-links {
+            position: absolute;
+            top: 60px;
+            right: 0;
+            flex-direction: column;
+            background: grey;
+            border-radius:10px;
+            
+            width: 200px;
+            padding: 20px;
+            transform: translateX(100%);
+            transition: 0.3s ease-in-out;
+          }
+
+          .nav-links.open {
+            transform: translateX(0);
+          }
+        }
+      

@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
+import './style/navbar.css';
 
 function Navbar() {
   const navigate = useNavigate();
@@ -18,83 +19,15 @@ function Navbar() {
   };
 
   return (
+
     <div className="parent">
-      <style>{`
-        .parent {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 10px;
-          position: relative;
-      
-        }
-
-        span {
-          color: teal;
-          cursor: pointer;
-        }
-
-        .nav-links {
-          display: flex;
-          gap: 20px;
-        }
-
-        /* Hamburger */
-        .hamburger {
-          display: none;
-          flex-direction: column;
-          cursor: pointer;
-        }
-
-        .hamburger span {
-          width: 25px;
-          height: 3px;
-          background: teal;
-          margin: 4px;
-          transition: 0.3s;
-        }
-
-        /* Animation */
-        .hamburger.active span:nth-child(1) {
-          transform: rotate(45deg) translate(5px, 5px);
-        }
-
-        .hamburger.active span:nth-child(2) {
-          opacity: 0;
-        }
-
-        .hamburger.active span:nth-child(3) {
-          transform: rotate(-45deg) translate(6px, -6px);
-        }
-
-        /* Mobile */
-        @media (max-width: 768px) {
-          .hamburger {
-            display: flex;
-          }
-
-          .nav-links {
-            position: absolute;
-            top: 60px;
-            right: 0;
-            flex-direction: column;
-            background: #f5f5f5;
-            width: 200px;
-            padding: 20px;
-            transform: translateX(100%);
-            transition: 0.3s ease-in-out;
-          }
-
-          .nav-links.open {
-            transform: translateX(0);
-          }
-        }
-      `}</style>
+     
+      <style></style>
 
       {/* Left */}
       <div>
         <Link to="/news">
-          <button>News</button>
+          <button>Async</button>
         </Link>
       </div>
 

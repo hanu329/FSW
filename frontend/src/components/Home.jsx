@@ -116,8 +116,8 @@ const styles = {
     marginBottom: "10px",
   },
   button: {
-    marginTop: "10px",
-    padding: "8px 12px",
+    marginTop: "7px",
+    padding: "5px 8px",
     border: "none",
     borderRadius: "8px",
     background: "#007bff",
