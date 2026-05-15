@@ -3,7 +3,7 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 
 import { BASE_URL } from "../config";
-import { Local_URL } from "../config";
+//import { Local_URL } from "../config";
 
 
 function Login() {
@@ -26,22 +26,18 @@ function Login() {
 //   "http://localhost:5000/api/auth/login",
 //   form
 // );
+
+console.log("formmmmmmmm", form)
 const res = await axios.post(
  `${BASE_URL}/api/auth/login`,
   form
 );
 
+console.log("is working", form, res)
+
 localStorage.setItem("token", res.data.token);
 navigate("/");
-<style>
-  
-{`
-  .myinput::placeholder {
-    font-size: 12px;
-    color: #999;
-  }
-`}
-</style>
+
   };
 
   return (
