@@ -2,6 +2,9 @@ import ExpData from "./ExpData";
 import Footer from "./Footer";
 import Navbar from "./Navbar";
 import { Link, useNavigate } from "react-router-dom";
+import { expImg } from "../assets/img";
+
+
 
 function Home() {
   return (
@@ -43,11 +46,12 @@ function Home() {
                       </div>
                 
                       {/* Expense Tracker Card */}
-                      <div style={styles.card}>
+                      <div style={styles.card} >
                         <img
-                          src="https://source.unsplash.com/200x200/?money"
+                          src={expImg?expImg:"https://source.unsplash.com/200x200/?money"}
                           alt="Expense"
                           style={styles.image}
+
                         />
                         <h3>Expense Tracker</h3>
                         <p>Track your daily spending and manage your budget easily.</p>
@@ -110,10 +114,10 @@ const styles = {
     cursor: "pointer",
   },
   image: {
-    width: "100px",
-    height: "100px",
+    width: "100%",
+    height: "100%",
     objectFit: "cover",
-    marginBottom: "10px",
+    marginBottom: "5px",
   },
   button: {
     marginTop: "7px",
@@ -124,6 +128,7 @@ const styles = {
     //color: "#fff",
     cursor: "pointer",
   },
+ 
 };
 
 

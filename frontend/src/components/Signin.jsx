@@ -27,7 +27,7 @@ function Login() {
 //   form
 // );
 
-console.log("formmmmmmmm", form)
+
 const res = await axios.post(
  `${BASE_URL}/api/auth/login`,
   form

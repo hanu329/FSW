@@ -25,8 +25,8 @@ function Navbar() {
       <style></style>
 
       {/* Left */}
-      <div>
-        <Link to="/news">
+      <div className="async">
+        <Link to="/home">
           <button>Async</button>
         </Link>
       </div>
