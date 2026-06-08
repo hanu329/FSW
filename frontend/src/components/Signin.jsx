@@ -8,24 +8,17 @@ import { BASE_URL } from "../config";
 
 function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
-   const [lgText, setlgText] = useState("login");
+   const [lgText, setlgText] = useState("sign in");
+     const [showPassword, setShowPassword] = useState(false);
+      const [isLoading, setIsLoading] = useState(false);
+
   
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setlgText("wait...")
-    // const res = await axios.post(`${Local_URL}/api/auth/login`, form);
-    // console.log("tokendata: ", res.data.token);
-    // localStorage.setItem("token", res.data.token);
-    // navigate("/profile");
-    // alert(res.data.message);
-
-
-//     const res1 = await axios.post(
-//   "http://localhost:5000/api/auth/login",
-//   form
-// );
+    console.log('login1')
 
 
 const res = await axios.post(
@@ -41,46 +34,89 @@ navigate("/");
   };
 
   return (
-     <div style={{position:"absolute", left: "30%", top:"20%",
-       border:"2px solid grey", 
-       borderRadius:"1rem",
-       padding:"2rem",
-      boxShadow:"rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;" 
-    }}>
-      <style>
+    <div className="login-container">
+      <div className="animated-bg">
+        <div className="gradient-sphere sphere-1"></div>
+        <div className="gradient-sphere sphere-2"></div>
+        <div className="gradient-sphere sphere-3"></div>
+      </div>
+      
+      <div className="login-card">
+        <div className="card-header">
+          <div className="logo">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="url(#gradient)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M2 17L12 22L22 17" stroke="url(#gradient)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M2 12L12 17L22 12" stroke="url(#gradient)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <defs>
+                <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#6366f1"/>
+                  <stop offset="100%" stopColor="#ec4899"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+          <h1>Welcome Back</h1>
+          <p>Sign in to continue your journey</p>
+        </div>
 
-  
-{`
+        <form onSubmit={handleSubmit}>
+          <div className="input-group">
+            <input
+              type="email"
+              id="email"
+             value={form.email}
+             onChange={e=>setForm({...form, email:e.target.value}) } 
+              required
+              placeholder="Email Address"
+            />
+          </div>
 
+          <div className="input-group">
+            <input
+              type={showPassword ? "text" : "password"}
+              id="password"
+            value={form.password}
+          onChange={e=>setForm({...form, password:e.target.value})}
+              required
+              placeholder="Password"
+            />
+            <button 
+              type="button"
+              className="password-toggle"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? "Hide" : "Show"}
+            </button>
+          </div>
 
-  .myinput::placeholder {
-    font-size: 12px;
-    color: #999;
-  }
-`}
-</style>
-    <form onSubmit={handleSubmit}>
-      <h2 style={{
-        //border:"3px solid teal", 
-     
-        paddingLeft:"3rem", 
-      }}>--Login--</h2>
-      <input placeholder="Email"  onChange={e=>setForm({...form, email:e.target.value}) } 
-       class="myinput"
-       style={{margin:"8px", border:"1px solid grey", borderRadius:"0.5rem",}}/> <br />
-      <input placeholder="Password"   class="myinput" type="password" onChange={e=>setForm({...form, password:e.target.value})}
-       style={{margin:"8px", border:"1px solid grey", borderRadius:"0.5rem",}} /><br />
-      <button>{lgText}</button>
-    </form>
+          <div className="form-options">
+            <label className="checkbox-label">
+              <input type="checkbox" /> Remember me
+            </label>
+            <a href="#" className="forgot-link">Forgot Password?</a>
+          </div>
 
-      <Link to="/register">
-              Register first!
-            </Link>
+          <button type="submit" className="login-button" disabled={isLoading}>
+            {lgText}
+          </button>
 
+          <div className="social-login">
+            <p>Or continue with</p>
+            <div className="social-icons">
+              <button type="button" className="social-btn google">G</button>
+              <button type="button" className="social-btn github">GH</button>
+              <button type="button" className="social-btn twitter">T</button>
+            </div>
+          </div>
+
+          <p className="signup-link">
+            Don't have an account? <a href="#">Sign up</a>
+          </p>
+        </form>
+      </div>
     </div>
   );
-}
+};
 
-export default Login;
-
-
+export default Login; 
