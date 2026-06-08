@@ -291,3 +291,6 @@ textarea,
 select {
   color: rgb(55, 45, 45) !important; /* Dark gray for better visibility */
 }
+.login-container{
+  background-color: black;
+}

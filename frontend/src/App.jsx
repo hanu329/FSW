@@ -4,7 +4,7 @@ import Signin from "./components/Signin";
 import Logout from "./components/Logout";
 import Home from "./components/Home";
 import Profile from "./components/Profile";
-import Demo from "./components/Demo";
+// import Demo from "./components/Demo";
 import PaymentButton from "./components/PaymentButton";
 import NewsComponent from "./components/NewsComponent";
 import { AiTool } from "./components/AiTool";
@@ -41,7 +41,7 @@ function App() {
        
           <Route path="/ai" element={<AiTool />} />
          <Route path="/payment" element={<PaymentButton />} />
-         <Route path="/d" element={<Demo />} />
+         {/* <Route path="/d" element={<Demo />} /> */}
     </Routes>
     </div>
   );

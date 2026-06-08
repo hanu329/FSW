@@ -1,5 +1,5 @@
 import React from 'react';
-import './style/Headbar.css';
+import '../style/headbar.css';
 
 const Headbar = () => {
   const currentDate = new Date().toLocaleDateString('en-US', {
