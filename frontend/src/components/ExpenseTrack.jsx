@@ -51,7 +51,7 @@ const saveExpenseToBackend = async (form) => {
   console.log("Token:", token); // Add this
   
   try {
-    const response = await fetch(`${Local_URL}/api/expenses`, {
+    const response = await fetch(`${BASE_URL}/api/expenses`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
