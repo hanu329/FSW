@@ -1,14 +1,42 @@
 import mongoose from "mongoose";
 
 const expenseSchema = new mongoose.Schema({
-  name: String,
-  amount: Number,
-  date: String,
-  hour: String,
-  minute: String,
-  period: String,
-  location: String,
-  shop: String,
+  details: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  amount: {
+    type: Number,
+    required: true,
+    min: 0
+  },
+  date: {
+    type: String,
+    required: true,
+    default: () => {
+      const today = new Date();
+      const year = today.getFullYear();
+      const month = String(today.getMonth() + 1).padStart(2, '0');
+      const day = String(today.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
+  },
+  time: {
+    type: String,
+    required: true,
+    default: () => {
+      const now = new Date();
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      return `${hours}:${minutes}`;
+    }
+  },
+  location: {
+    type: String,
+    required: true,
+    trim: true
+  },
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",

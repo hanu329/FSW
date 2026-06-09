@@ -1,195 +1,293 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { BASE_URL } from '../config';
+import '../style/expensesTable.css';
 
-import { BASE_URL } from "../config";
-import { Local_URL } from "../config";
-
-const ExpData = () => {
-
+const ExpensesTable = () => {
   const [expenses, setExpenses] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterDate, setFilterDate] = useState("");
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    fetchExpenses();
-  }, []);
+  console.log("Before useEffect111");
+
+  // Helper functions for default date and time
+  const getTodayDate = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
+  const getCurrentTime = () => {
+    const now = new Date();
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    return `${hours}:${minutes}`;
+  };
+
+  // Fetch expenses on component mount
+
+
+useEffect(() => {
+
+  fetchExpenses();
+}, []);
+
+
 
   const fetchExpenses = async () => {
+    const token = localStorage.getItem("token");
+    setIsLoading(true);
+    console.log("ch1")
     try {
-
-      const token = localStorage.getItem("token");
-   
-      const res = await fetch(`${BASE_URL}/api/expenses`, {
+      const response = await fetch(`${BASE_URL}/api/expenses`, {
+        method: "GET",
         headers: {
-          "Authorization": `Bearer ${token}`
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json"
         }
       });
+    
 
-      const data = await res.json();
+      if (!response.ok) {
+        throw new Error("Failed to fetch expenses");
+      }
+
+      const data = await response.json();
+      console.log("data1", data)
       setExpenses(data);
-
-    } catch (error) {
-      console.error(error);
+    } catch (err) {
+      console.error("Error fetching expenses:", err);
+      setError(err.message);
+    } finally {
+      setIsLoading(false);
     }
   };
-  ////////
-  const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
-const currentMonth = new Date().getMonth() + 1;
-const currentYear = new Date().getFullYear();
 
-let todayTotal = 0;
-let monthTotal = 0;
-let overallTotal = 0;
+  const handleDelete = async (id) => {
+    if (window.confirm("Are you sure you want to delete this expense?")) {
+      const token = localStorage.getItem("token");
+      
+      try {
+        const response = await fetch(`${BASE_URL}/api/expenses/${id}`, {
+          method: "DELETE",
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json"
+          }
+        });
 
-expenses.forEach((exp) => {
-  const expDate = new Date(exp.date);
-  const expMonth = expDate.getMonth() + 1;
-  const expYear = expDate.getFullYear();
-
-  overallTotal += Number(exp.amount);
-
-  if (exp.date === today) {
-    todayTotal += Number(exp.amount);
-  }
-
-  if (expMonth === currentMonth && expYear === currentYear) {
-    monthTotal += Number(exp.amount);
-  }
-});
-////
-const groupedExpenses = expenses
-  .sort((a, b) => new Date(a.date) - new Date(b.date)) // sort by date
-  .reduce((acc, curr) => {
-    if (!acc[curr.date]) {
-      acc[curr.date] = [];
+        if (response.ok) {
+          setExpenses(expenses.filter(expense => expense.id !== id));
+          alert("Expense deleted successfully!");
+        } else {
+          alert("Failed to delete expense");
+        }
+      } catch (err) {
+        console.error("Error deleting expense:", err);
+        alert("Error deleting expense");
+      }
     }
-    acc[curr.date].push(curr);
-    return acc;
-  }, {});
+  };
+
+  // Filter expenses based on search and date
+  const filteredExpenses = expenses.filter(expense => {
+    const matchesSearch = expense.details?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         expense.location?.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesDate = filterDate ? expense.date === filterDate : true;
+    return matchesSearch && matchesDate;
+  });
+
+  // Calculate total amount
+  const totalAmount = filteredExpenses.reduce((sum, expense) => sum + (parseFloat(expense.amount) || 0), 0);
 
   return (
-    <div>
-         <style>{`
-      th, td {
-        margin-left: 30px;
-        padding: 10px;
-      }
-        p{
-        margin: 10px;
-        color:teal
-        }
-        h2{
-        font-size:25px;
-        margin-left:5rem;
-        color:red
-        }
-    `}</style>
-      <h2> Expenses So Far!</h2>
-<p>
-  <b>This day:</b> {todayTotal} &nbsp; | &nbsp;
-  <b>This month:</b> {monthTotal} &nbsp; | &nbsp;
-  <b>Total till now:</b> {overallTotal}
-</p>
+    <div className="expenses-table-container">
+      <div className="animated-bg">
+        <div className="gradient-sphere sphere-1"></div>
+        <div className="gradient-sphere sphere-2"></div>
+        <div className="gradient-sphere sphere-3"></div>
+      </div>
 
-<table border="1" cellPadding="10">
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Amount</th>
-      <th>Date</th>
-      <th>Time</th>
-      <th>Location</th>
-      <th>Shop</th>
-    </tr>
-  </thead>
+      <div className="expenses-content">
+        {/* Header Section */}
+        <div className="expenses-header">
+          <div className="header-left">
+            <h1 className="expenses-title">
+              <span className="title-icon">📊</span>
+              Expense Tracker
+            </h1>
+            <p className="expenses-subtitle">Manage and track all your expenses</p>
+          </div>
+          <Link to="/add-expense" className="add-expense-btn">
+            <span className="btn-icon">+</span>
+            Add New Expense
+          </Link>
+        </div>
 
-  <tbody>
-  {(() => {
-    let weekTotal = 0;
-    let prevWeek = null;
+        {/* Stats Cards */}
+        <div className="stats-cards">
+          <div className="stat-card total-expenses">
+            <div className="stat-icon">💰</div>
+            <div className="stat-info">
+              <h3>Total Expenses</h3>
+              <p className="stat-amount">${totalAmount.toFixed(2)}</p>
+            </div>
+          </div>
+          <div className="stat-card expense-count">
+            <div className="stat-icon">📝</div>
+            <div className="stat-info">
+              <h3>Number of Transactions</h3>
+              <p className="stat-amount">{filteredExpenses.length}</p>
+            </div>
+          </div>
+          <div className="stat-card average-expense">
+            <div className="stat-icon">📊</div>
+            <div className="stat-info">
+              <h3>Average Expense</h3>
+              <p className="stat-amount">
+                ${filteredExpenses.length > 0 
+                  ? (totalAmount / filteredExpenses.length).toFixed(2) 
+                  : "0.00"}
+              </p>
+            </div>
+          </div>
+        </div>
 
-    return Object.entries(groupedExpenses).map(([date, exps], index, arr) => {
-      const currentDate = new Date(date);
+        {/* Search and Filter Bar */}
+        <div className="search-filter-bar">
+          <div className="search-box">
+            <span className="search-icon">🔍</span>
+            <input
+              type="text"
+              placeholder="Search by details or location..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="search-input"
+            />
+          </div>
+          <div className="filter-box">
+            <span className="filter-icon">📅</span>
+            <input
+              type="date"
+              value={filterDate}
+              onChange={(e) => setFilterDate(e.target.value)}
+              className="filter-input"
+            />
+            {filterDate && (
+              <button className="clear-filter" onClick={() => setFilterDate("")}>
+                ✕
+              </button>
+            )}
+          </div>
+        </div>
 
-      // Week number logic (simple)
-      const getWeek = (d) => {
-        const firstDay = new Date(d.getFullYear(), 0, 1);
-        const pastDays = Math.floor((d - firstDay) / 86400000);
-        return Math.ceil((pastDays + firstDay.getDay() + 1) / 7);
-      };
-
-      const currentWeek = getWeek(currentDate);
-
-      // Daily total
-      const dailyTotal = exps.reduce(
-        (sum, item) => sum + Number(item.amount),
-        0
-      );
-
-      weekTotal += dailyTotal;
-
-      let showWeekTotal = false;
-
-      // Check next date's week
-      if (index === arr.length - 1) {
-        showWeekTotal = true; // last item
-      } else {
-        const nextDate = new Date(arr[index + 1][0]);
-        const nextWeek = getWeek(nextDate);
-
-        if (currentWeek !== nextWeek) {
-          showWeekTotal = true;
-        }
-      }
-
-      return (
-        <React.Fragment key={date}>
-          {/* Rows */}
-          {exps.map((exp) => (
-            <tr key={exp._id}>
-              <td>{exp.name}</td>
-              <td>{exp.amount}</td>
-              <td>{exp.date}</td>
-              <td>{exp.hour}:{exp.minute} {exp.period}</td>
-              <td>{exp.location}</td>
-              <td>{exp.shop}</td>
-            </tr>
-          ))}
-
-          {/* Daily Total */}
-          <tr>
-            <td colSpan="6" style={{ fontWeight: "bold", background: "grey" }}>
-              <span style={{ marginLeft: "15rem" }}>
-                Day Total : ₹{dailyTotal}
-              </span>
-            </td>
-          </tr>
-
-          {/* ✅ Week Total */}
-          {showWeekTotal && (
-            <tr>
-              <td colSpan="6" style={{ fontWeight: "bold", background: "black", color: "white" }}>
-                <span style={{ marginLeft: "15rem" }}>
-                  Week Total : ₹{weekTotal}
-                </span>
-              </td>
-            </tr>
+        {/* Expenses Table */}
+        <div className="table-wrapper">
+          {isLoading ? (
+            <div className="loading-state">
+              <div className="spinner"></div>
+              <p>Loading expenses...</p>
+            </div>
+          ) : error ? (
+            <div className="error-state">
+              <span className="error-icon">⚠️</span>
+              <p>{error}</p>
+              <button onClick={fetchExpenses} className="retry-btn">Retry</button>
+            </div>
+          ) : filteredExpenses.length === 0 ? (
+            <div className="empty-state">
+              <span className="empty-icon">📭</span>
+              <h3>No expenses found</h3>
+              <p>{searchTerm || filterDate ? "Try adjusting your search filters" : "Start by adding your first expense"}</p>
+              <Link to="/add-expense" className="empty-add-btn">
+                + Add Your First Expense
+              </Link>
+            </div>
+          ) : (
+            <div className="table-responsive">
+              <table className="expenses-table">
+                <thead>
+                  <tr>
+                    <th>📝 Details</th>
+                    <th>💰 Amount</th>
+                    <th>📅 Date</th>
+                    <th>⏰ Time</th>
+                    <th>📍 Location</th>
+                    <th>⚙️ Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredExpenses.map((expense, index) => (
+                    <tr key={expense.id || index} className="table-row">
+                      <td>
+                        <div className="details-content">
+                          <span className="detail-text">{expense.details || "N/A"}</span>
+                        </div>
+                      </td>
+                      <td className="amount-cell">
+                        <span className="amount-badge">
+                          ${expense.amount ? parseFloat(expense.amount).toFixed(2) : "0.00"}
+                        </span>
+                      </td>
+                      <td className="date-cell">
+                        <span className="date-badge">
+                          📅 {expense.date || getTodayDate()}
+                        </span>
+                      </td>
+                      <td className="time-cell">
+                        <span className="time-badge">
+                          ⏰ {expense.time || getCurrentTime()}
+                        </span>
+                      </td>
+                      <td className="location-cell">
+                        <span className="location-badge">
+                          📍 {expense.location || "N/A"}
+                        </span>
+                      </td>
+                      <td className="actions-cell">
+                        <button 
+                          className="action-btn edit-btn"
+                          onClick={() => navigate(`/edit-expense/${expense.id}`)}
+                          title="Edit"
+                        >
+                          ✏️
+                        </button>
+                        <button 
+                          className="action-btn delete-btn"
+                          onClick={() => handleDelete(expense.id)}
+                          title="Delete"
+                        >
+                          🗑️
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+               </table>
+            </div>
           )}
+        </div>
 
-          {/* Reset after printing */}
-          {showWeekTotal && (weekTotal = 0)}
-        </React.Fragment>
-      );
-    });
-  })()}
-</tbody></table>
-<div>
-   <button style={{margin:"10px"}}>
-                   <Link to="/exp">
-                 add new expenses
-                </Link>
-                </button>
-</div>
+        {/* Footer Summary */}
+        {filteredExpenses.length > 0 && !isLoading && (
+          <div className="table-footer">
+            <div className="footer-info">
+              <span>Showing {filteredExpenses.length} of {expenses.length} transactions</span>
+            </div>
+            <div className="footer-total">
+              <span>Total Amount:</span>
+              <strong>${totalAmount.toFixed(2)}</strong>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
 
-export default ExpData;
+export default ExpensesTable;

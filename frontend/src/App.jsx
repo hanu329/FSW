@@ -8,9 +8,9 @@ import Profile from "./components/Profile";
 import PaymentButton from "./components/PaymentButton";
 import NewsComponent from "./components/NewsComponent";
 import { AiTool } from "./components/AiTool";
-import ExpenseForm from "./components/ExpenseTrack";
+import AddExpense from "./components/ExpenseTrack";
 import SignInRedirect from "./components/SignInRedirect";
-import ExpData from "./components/ExpData";
+import ExpensesTable from "./components/ExpData";
 
 function App() {
   return (
@@ -29,12 +29,12 @@ function App() {
     path="/exp"
     element={
       <SignInRedirect>
-        <ExpenseForm />
+        <AddExpense />
       </SignInRedirect>
     }
   />
   
-        <Route path="/expdata" element={<ExpData />} />
+        <Route path="/expdata" element={<ExpensesTable />} />
 
       
         <Route path="/news" element={<NewsComponent />} />
