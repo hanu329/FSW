@@ -12,7 +12,7 @@ const expenseSchema = new mongoose.Schema({
     min: 0
   },
   date: {
-    type: String,
+    type: Date,
     required: true,
     default: () => {
       const today = new Date();

@@ -9,6 +9,8 @@ const ExpensesTable = () => {
   const [error, setError] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [filterDate, setFilterDate] = useState("");
+  const [sortConfig, setSortConfig] = useState({ key: 'date', direction: 'desc' });
+
   const navigate = useNavigate();
 
   console.log("Before useEffect111");
@@ -95,15 +97,46 @@ useEffect(() => {
   };
 
   // Filter expenses based on search and date
-  const filteredExpenses = expenses.filter(expense => {
+  let filteredExpenses = expenses.filter(expense => {
     const matchesSearch = expense.details?.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          expense.location?.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesDate = filterDate ? expense.date === filterDate : true;
     return matchesSearch && matchesDate;
   });
-
+//default sort
+  filteredExpenses= [...expenses].sort((a, b) => {
+  
+      return new Date(a.date) - new Date(b.date); // Oldest first
+    } 
+  )
   // Calculate total amount
   const totalAmount = filteredExpenses.reduce((sum, expense) => sum + (parseFloat(expense.amount) || 0), 0);
+  
+
+// Apply sorting to your expenses
+console.log("exxx", expenses)
+console.log(typeof expenses?.[0]?.date);
+//console.log(typeof expenses[0].date);
+const sortFun=()=>{
+const sortedExpenses = [...expenses].sort((a, b) => {
+  if (sortConfig.key === 'date') {
+    if (sortConfig.direction === 'asc') {
+      return new Date(a.date) - new Date(b.date); // Oldest first
+    } else {
+      return new Date(b.date) - new Date(a.date); // Newest first
+    }
+  } else if (sortConfig.key === 'amount') {
+    if (sortConfig.direction === 'asc') {
+      return a.amount - b.amount; // Lowest first
+    } else {
+      return b.amount - a.amount; // Highest first
+    }
+  }
+  return 0;
+});
+setExpenses(sortedExpenses)
+}
+
 
   return (
     <div className="expenses-table-container">
@@ -123,7 +156,7 @@ useEffect(() => {
             </h1>
             <p className="expenses-subtitle">Manage and track all your expenses</p>
           </div>
-          <Link to="/add-expense" className="add-expense-btn">
+          <Link to="/exp" className="add-expense-btn">
             <span className="btn-icon">+</span>
             Add New Expense
           </Link>
@@ -186,6 +219,34 @@ useEffect(() => {
           </div>
         </div>
 
+
+
+        <div className="sort-dropdown">
+  <select 
+    value={`${sortConfig.key}-${sortConfig.direction}`}
+    onChange={(e) => {
+      const [key, direction] = e.target.value.split('-');
+      setSortConfig({ key, direction });
+      sortFun()
+    }}
+    style={{
+      padding: '8px 12px',
+      borderRadius: '8px',
+      border: '1px solid #e5e7eb',
+      background: 'white',
+      cursor: 'pointer',
+      margin:'10px'
+    }}
+  >
+    <option value="date-asc">📅 sort </option>
+    <option value="date-desc">📅 Date (Newest First)</option>
+    <option value="date-asc">📅 Date (Oldest First)</option>
+    <option value="amount-desc">💰 Amount (Highest First)</option>
+    <option value="amount-asc">💰 Amount (Lowest First)</option>
+  </select>
+</div>
+{/* new short and fileter above */}
+
         {/* Expenses Table */}
         <div className="table-wrapper">
           {isLoading ? (
@@ -204,72 +265,113 @@ useEffect(() => {
               <span className="empty-icon">📭</span>
               <h3>No expenses found</h3>
               <p>{searchTerm || filterDate ? "Try adjusting your search filters" : "Start by adding your first expense"}</p>
-              <Link to="/add-expense" className="empty-add-btn">
+              <Link to="/exp" className="empty-add-btn">
                 + Add Your First Expense
               </Link>
             </div>
           ) : (
             <div className="table-responsive">
-              <table className="expenses-table">
-                <thead>
-                  <tr>
-                    <th>📝 Details</th>
-                    <th>💰 Amount</th>
-                    <th>📅 Date</th>
-                    <th>⏰ Time</th>
-                    <th>📍 Location</th>
-                    <th>⚙️ Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredExpenses.map((expense, index) => (
-                    <tr key={expense.id || index} className="table-row">
-                      <td>
-                        <div className="details-content">
-                          <span className="detail-text">{expense.details || "N/A"}</span>
-                        </div>
-                      </td>
-                      <td className="amount-cell">
-                        <span className="amount-badge">
-                          ${expense.amount ? parseFloat(expense.amount).toFixed(2) : "0.00"}
-                        </span>
-                      </td>
-                      <td className="date-cell">
-                        <span className="date-badge">
-                          📅 {expense.date || getTodayDate()}
-                        </span>
-                      </td>
-                      <td className="time-cell">
-                        <span className="time-badge">
-                          ⏰ {expense.time || getCurrentTime()}
-                        </span>
-                      </td>
-                      <td className="location-cell">
-                        <span className="location-badge">
-                          📍 {expense.location || "N/A"}
-                        </span>
-                      </td>
-                      <td className="actions-cell">
-                        <button 
-                          className="action-btn edit-btn"
-                          onClick={() => navigate(`/edit-expense/${expense.id}`)}
-                          title="Edit"
-                        >
-                          ✏️
-                        </button>
-                        <button 
-                          className="action-btn delete-btn"
-                          onClick={() => handleDelete(expense.id)}
-                          title="Delete"
-                        >
-                          🗑️
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-               </table>
-            </div>
+  <table className="expenses-table">
+    <thead>
+      <tr>
+        <th>📝 Details</th>
+        <th>💰 Amount</th>
+        <th>📅 Date</th>
+        <th>⏰ Time</th>
+        <th>📍 Location</th>
+        <th>⚙️ Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {(() => {
+        // Group expenses by date
+        const groupedExpenses = filteredExpenses.reduce((groups, expense) => {
+          const dateKey = new Date(expense.date).toLocaleDateString('en-GB');
+          if (!groups[dateKey]) {
+            groups[dateKey] = [];
+          }
+          groups[dateKey].push(expense);
+          return groups;
+        }, {});
+
+        // Create JSX with date breakers
+        const groupedJsx = [];
+        
+        Object.keys(groupedExpenses).forEach((dateKey, dateIndex) => {
+          const expensesOnDate = groupedExpenses[dateKey];
+          const totalForDate = expensesOnDate.reduce((sum, expense) => 
+            sum + parseFloat(expense.amount || 0), 0
+          );
+          
+          // Add the date breaker row with total
+          groupedJsx.push(
+            <tr key={`breaker-${dateIndex}`} className="date-breaker-row">
+              <td colSpan="6" className="date-breaker-cell">
+                <div className="date-breaker-content">
+                  <span className="breaker-date">📅 {dateKey}</span>
+                  <span className="breaker-total">
+                    Total: ${totalForDate.toFixed(2)}
+                  </span>
+                </div>
+              </td>
+            </tr>
+          );
+          
+          // Add all expenses for this date
+          expensesOnDate.forEach((expense, idx) => {
+            groupedJsx.push(
+              <tr key={expense.id || `${dateKey}-${idx}`} className="table-row">
+                <td>
+                  <div className="details-content">
+                    <span className="detail-text">{expense.details || "N/A"}</span>
+                  </div>
+                </td>
+                <td className="amount-cell">
+                  <span className="amount-badge">
+                    ${expense.amount ? parseFloat(expense.amount).toFixed(2) : "0.00"}
+                  </span>
+                </td>
+                <td className="date-cell">
+                  <span className="date-badge">
+                    📅 {new Date(expense.date).toLocaleDateString('en-GB')}
+                  </span>
+                </td>
+                <td className="time-cell">
+                  <span className="time-badge">
+                    ⏰ {expense.time || "N/A"}
+                  </span>
+                </td>
+                <td className="location-cell">
+                  <span className="location-badge">
+                    📍 {expense.location || "N/A"}
+                  </span>
+                </td>
+                <td className="actions-cell">
+                  <button 
+                    className="action-btn edit-btn"
+                    onClick={() => navigate(`/edit-expense/${expense.id}`)}
+                    title="Edit"
+                  >
+                    ✏️
+                  </button>
+                  <button 
+                    className="action-btn delete-btn"
+                    onClick={() => handleDelete(expense.id)}
+                    title="Delete"
+                  >
+                    🗑️
+                  </button>
+                </td>
+              </tr>
+            );
+          });
+        });
+        
+        return groupedJsx;
+      })()}
+    </tbody>
+  </table>
+</div>
           )}
         </div>
 

@@ -19,7 +19,7 @@ export const createExpense = async (req, res) => {
       const expense = new Expense({
       details: details.trim(),
       amount: Number(amount), // Convert to number (instead of parseFloat)
-      date: date,
+      date: new Date(date),
       time: time,
       location: location.trim(),
       user: req.userId
@@ -49,7 +49,10 @@ export const createExpense = async (req, res) => {
 export const getExpenses = async (req,res)=>{
   try{
 
-    const expenses = await Expense.find({ user: req.userId });
+ //   const expenses = await Expense.find({ user: req.userId });
+
+  const expenses = await Expense.find({ user: req.userId })
+  .sort({ date: 1, time: 1 }); // Ascending order
 
     res.json(expenses);
 
