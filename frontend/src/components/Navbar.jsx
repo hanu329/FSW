@@ -25,7 +25,7 @@ let token = localStorage.getItem("token");
     return;
   }
 
-  axios.get(`${Local_URL}/api/user/me`, {
+  axios.get(`${BASE_URL}/api/user/me`, {
     headers: {
       Authorization: `Bearer ${token}`
     }
