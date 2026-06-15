@@ -25,7 +25,7 @@ let token = localStorage.getItem("token");
     return;
   }
 
-  axios.get(`${BASE_URL}/api/user/me`, {
+  axios.get(`${Local_URL}/api/user/me`, {
     headers: {
       Authorization: `Bearer ${token}`
     }
@@ -37,7 +37,7 @@ let token = localStorage.getItem("token");
   
 },[])
   
-
+  console.log("user22",user)
   const handleLogout = () => {
     localStorage.removeItem('token');
     navigate('/signin');
@@ -76,10 +76,11 @@ let token = localStorage.getItem("token");
         {/* User Section */}
         <div className="navbar-user">
           <div className="user-dropdown" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
-            <div className="user-avatar">
-               <img  src={user.avatar || "https://via.placeholder.com/150"}  width="150" alt={user.name} />
+             <div className="user-avatar">
+               <img  src={user?.avatar || "https://via.placeholder.com/150"}  width="150" alt={user?.name} />
             </div>
-            <span className="user-name">Hello  {user.name}</span>
+            
+            <span className="user-name">Hello  {user?.name}</span> 
             <span className="dropdown-arrow">▼</span>
           </div>
           
