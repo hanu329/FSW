@@ -1,11 +1,42 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { BASE_URL } from "../config";
+import { Local_URL } from "../config";
 import { Link, useNavigate } from 'react-router-dom';
 import '../style/navbar.css';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [user, setUser]= useState(null)
   const navigate = useNavigate();
+
+
+useEffect(()=>{
+let token = localStorage.getItem("token");
+  if (token) {
+    token = token.replace(/^"|"$/g, '').trim();
+  }
+  
+  console.log("Cleaned token:", token);
+  
+  if (!token) {
+    console.error("No valid token found");
+    return;
+  }
+
+  axios.get(`${BASE_URL}/api/user/me`, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  })
+  .then(res => setUser(res.data))
+  .catch(err => console.error("Error:", err.response?.data));
+
+  console.log("user",user)
+  
+},[])
+  
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -30,7 +61,7 @@ const Navbar = () => {
               </defs>
             </svg>
           </div>
-          <span className="logo-text">ServiceHub</span>
+          <span className="logo-text">Asynk</span>
         </div>
 
         {/* Desktop Menu */}
@@ -46,9 +77,9 @@ const Navbar = () => {
         <div className="navbar-user">
           <div className="user-dropdown" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
             <div className="user-avatar">
-              <span>👤</span>
+               <img  src={user.avatar || "https://via.placeholder.com/150"}  width="150" alt={user.name} />
             </div>
-            <span className="user-name">John Doe</span>
+            <span className="user-name">Hello  {user.name}</span>
             <span className="dropdown-arrow">▼</span>
           </div>
           

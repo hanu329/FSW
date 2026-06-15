@@ -11,15 +11,30 @@ import ExpenseForm from "./ExpenseTrack";
 function Profile() {
   const [user, setUser] = useState(null);
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
 
-    axios.get(`${BASE_URL}/api/user/me`, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    }).then(res => setUser(res.data));
-  }, []);
+
+
+useEffect(() => {
+  let token = localStorage.getItem("token");
+  if (token) {
+    token = token.replace(/^"|"$/g, '').trim();
+  }
+  
+  console.log("Cleaned token:", token);
+  
+  if (!token) {
+    console.error("No valid token found");
+    return;
+  }
+
+  axios.get(`${BASE_URL}/api/user/me`, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  })
+  .then(res => setUser(res.data))
+  .catch(err => console.error("Error:", err.response?.data));
+}, []);
 
   if (!user) return <p>Loading...</p>;
   console.log("user ", user)
