@@ -43,7 +43,7 @@ const Home = () => {
     },
     {
       id: 4,
-      title: "Other Services",
+      title: "Post Ur Mind",
       description: "Explore more features including weather, notes, calculator & more",
       icon: "🎨",
       gradient: "linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)",

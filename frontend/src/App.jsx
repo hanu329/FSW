@@ -34,7 +34,9 @@ function App() {
     }
   />
   
-        <Route path="/expdata" element={<ExpensesTable />} />
+        <Route path="/expdata" element={  <SignInRedirect>
+       <ExpensesTable />
+      </SignInRedirect>} />
 
       
         <Route path="/news" element={<NewsComponent />} />

@@ -12,6 +12,20 @@ const Navbar = () => {
   const navigate = useNavigate();
 
 
+
+
+const signInCheck = () => {
+  const token = localStorage.getItem("token"); // or wherever you store JWT
+  console.log("token",token)
+
+  if (!token) {
+    return false;
+  }
+
+  return true;
+};
+
+
 useEffect(()=>{
 let token = localStorage.getItem("token");
   if (token) {
@@ -40,7 +54,7 @@ let token = localStorage.getItem("token");
   console.log("user22",user)
   const handleLogout = () => {
     localStorage.removeItem('token');
-    navigate('/signin');
+    navigate('/home');
   };
 
   return (
@@ -77,7 +91,7 @@ let token = localStorage.getItem("token");
         <div className="navbar-user">
           <div className="user-dropdown" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
              <div className="user-avatar">
-               <img  src={user?.avatar || "https://via.placeholder.com/150"}  width="150" alt={user?.name} />
+               <img  src={user?.avatar || "/vite.svg"}  width="150" alt={user?.name} />
             </div>
             
             <span className="user-name">Hello  {user?.name}</span> 
@@ -90,7 +104,20 @@ let token = localStorage.getItem("token");
               <Link to="/settings" className="dropdown-item">⚙️ Settings</Link>
               <Link to="/dashboard" className="dropdown-item">📊 Dashboard</Link>
               <hr className="dropdown-divider" />
-              <button onClick={handleLogout} className="dropdown-item logout">🚪 Logout</button>
+{signInCheck() ? (
+  <button onClick={handleLogout} className="dropdown-item logout">
+    🚪 Logout
+  </button>
+) : (
+  <>
+    <button className="dropdown-item login">
+       <Link to="/signin" className="dropdown-item"> 🔐 Login</Link>
+    </button>
+    <button className="dropdown-item register">
+       <Link to="/register" className="dropdown-item">📝 Register</Link>
+    </button>
+  </>
+)}
             </div>
           )}
         </div>
