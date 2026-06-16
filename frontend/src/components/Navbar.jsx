@@ -83,7 +83,7 @@ let token = localStorage.getItem("token");
           <Link to="/" className="nav-link">Home</Link>
           <Link to="/news" className="nav-link">News</Link>
           <Link to="/todo" className="nav-link">Todo</Link>
-          <Link to="/expenses" className="nav-link">Expenses</Link>
+          <Link to="/expdata" className="nav-link">Expenses</Link>
           <Link to="/services" className="nav-link">Services</Link>
         </div>
 
