@@ -11,6 +11,9 @@ import { AiTool } from "./components/AiTool";
 import AddExpense from "./components/ExpenseTrack";
 import SignInRedirect from "./components/SignInRedirect";
 import ExpensesTable from "./components/ExpData";
+import './style/blog.css';
+import BlogList from "./components/BlogList";
+import CreateBlog from './components/Blog';
 
 function App() {
   return (
@@ -37,7 +40,22 @@ function App() {
         <Route path="/expdata" element={  <SignInRedirect>
        <ExpensesTable />
       </SignInRedirect>} />
-
+      <Route
+    path="/blog"
+    element={
+      <SignInRedirect>
+        <CreateBlog />
+      </SignInRedirect>
+    }
+  />
+<Route
+    path="/blogList"
+    element={
+      <SignInRedirect>
+        <BlogList />
+      </SignInRedirect>
+    }
+  />
       
         <Route path="/news" element={<NewsComponent />} />
        

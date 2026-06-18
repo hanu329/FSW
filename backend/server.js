@@ -14,6 +14,7 @@ import Razorpay from "razorpay";
 import crypto from "crypto";
 import routeAuth from "./routes/auth.js";
 import expRoutes from "./routes/expRoutes.js"
+import blogRoutes from "./routes/blogRoutes.js"
 import profile from "./routes/userRoutes.js";
 import { protect } from "./middleware/authRoutes.js";
 
@@ -111,9 +112,20 @@ mongoose.connect(process.env.MONGO_URI)
 
 
 app.use("/api/auth",routeAuth );
+
 app.use("/api/user",profile );
 app.use("/api", expRoutes);
+app.use('/api/blogs', blogRoutes);
 
+// mongoose.connect('mongodb://localhost:27017/blogapp', {
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true
+// }).then(() => console.log('MongoDB connected'))
+//   .catch(err => console.error('MongoDB connection error:', err));
+
+// // Import models
+// const User = require('./models/User');
+// const Blog = require('./models/Blog');
 
 
 // app.use("/api/auth", require("./routes/userRoutes"));
