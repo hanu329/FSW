@@ -54,7 +54,9 @@ let token = localStorage.getItem("token");
   console.log("user22",user)
 const handleLogout = () => {
     localStorage.removeItem('token');
+    console.log('is everything working')
     navigate('/');
+
     window.location.reload();
 };
   return (
