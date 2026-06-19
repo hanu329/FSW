@@ -54,8 +54,9 @@ let token = localStorage.getItem("token");
   console.log("user22",user)
 const handleLogout = () => {
     localStorage.removeItem('token');
+  setUser(null)
     navigate('/');
-   setUser(null)
+   
 };
   return (
     <nav className="navbar">
