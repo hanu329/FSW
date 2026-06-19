@@ -8,57 +8,61 @@ import '../style/navbar.css';
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [user, setUser]= useState(null)
+  const [user, setUser] = useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const navigate = useNavigate();
 
-
-
-
-const signInCheck = () => {
-  const token = localStorage.getItem("token"); // or wherever you store JWT
-  console.log("token",token)
-
-  if (!token) {
-    return false;
-  }
-
-  return true;
-};
-
-
-useEffect(()=>{
-let token = localStorage.getItem("token");
-  if (token) {
-    token = token.replace(/^"|"$/g, '').trim();
-  }
-  
-  console.log("Cleaned token:", token);
-  
-  if (!token) {
-    console.error("No valid token found");
-    return;
-  }
-
-  axios.get(`${BASE_URL}/api/user/me`, {
-    headers: {
-      Authorization: `Bearer ${token}`
+  const signInCheck = () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      return false;
     }
-  })
-  .then(res => setUser(res.data))
-  .catch(err => console.error("Error:", err.response?.data));
+    return true;
+  };
 
-  console.log("user",user)
-  
-},[])
-  
-  console.log("user22",user)
-const handleLogout = () => {
+  useEffect(() => {
+    let token = localStorage.getItem("token");
+    if (token) {
+      token = token.replace(/^"|"$/g, '').trim();
+    }
+    
+    console.log("Cleaned token:", token);
+    
+    if (!token) {
+      console.error("No valid token found");
+      setIsAuthenticated(false);
+      setUser(null);
+      return;
+    }
+
+    axios.get(`${BASE_URL}/api/user/me`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+    .then(res => {
+      setUser(res.data);
+      setIsAuthenticated(true);
+    })
+    .catch(err => {
+      console.error("Error:", err.response?.data);
+      // If token is invalid, clear it
+      localStorage.removeItem('token');
+      setIsAuthenticated(false);
+      setUser(null);
+    });
+  }, []);
+
+  const handleLogout = () => {
     localStorage.removeItem('token');
-    console.log('is everything working')
+    setIsAuthenticated(false);
+    setUser(null);
+    setIsDropdownOpen(false);
+    setIsMenuOpen(false);
     navigate('/');
-
     window.location.reload();
-};
+  };
+
   return (
     <nav className="navbar">
       <div className="navbar-container">
@@ -92,34 +96,37 @@ const handleLogout = () => {
         {/* User Section */}
         <div className="navbar-user">
           <div className="user-dropdown" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
-             <div className="user-avatar">
-               <img  src={user?.avatar || "/vite.svg"}  width="150" alt={user?.name} />
-            </div>
-            
-            <span className="user-name">Hello  {user?.name}</span> 
+            {isAuthenticated && user ? (
+              <>
+                <div className="user-avatar">
+                  <img src={user?.avatar || "/vite.svg"} width="150" alt={user?.name} />
+                </div>
+                <span className="user-name">Hello {user?.name}</span>
+              </>
+            ) : (
+              <span className="user-name">Guest</span>
+            )}
             <span className="dropdown-arrow">▼</span>
           </div>
           
           {isDropdownOpen && (
             <div className="dropdown-menu">
-              <Link to="/profile" className="dropdown-item">📄 Profile</Link>
-              <Link to="/settings" className="dropdown-item">⚙️ Settings</Link>
-              <Link to="/dashboard" className="dropdown-item">📊 Dashboard</Link>
-              <hr className="dropdown-divider" />
-{signInCheck() ? (
-  <button onClick={handleLogout} className="dropdown-item logout">
-    🚪 Logout
-  </button>
-) : (
-  <>
-    <button className="dropdown-item login">
-       <Link to="/signin" className="dropdown-item"> 🔐 Login</Link>
-    </button>
-    <button className="dropdown-item register">
-       <Link to="/register" className="dropdown-item">📝 Register</Link>
-    </button>
-  </>
-)}
+              {isAuthenticated ? (
+                <>
+                  <Link to="/profile" className="dropdown-item">📄 Profile</Link>
+                  <Link to="/settings" className="dropdown-item">⚙️ Settings</Link>
+                  <Link to="/dashboard" className="dropdown-item">📊 Dashboard</Link>
+                  <hr className="dropdown-divider" />
+                  <button onClick={handleLogout} className="dropdown-item logout">
+                    🚪 Logout
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link to="/signin" className="dropdown-item">🔐 Login</Link>
+                  <Link to="/register" className="dropdown-item">📝 Register</Link>
+                </>
+              )}
             </div>
           )}
         </div>
@@ -139,9 +146,24 @@ const handleLogout = () => {
           <Link to="/expenses" className="mobile-nav-link" onClick={() => setIsMenuOpen(false)}>Expenses</Link>
           <Link to="/services" className="mobile-nav-link" onClick={() => setIsMenuOpen(false)}>Services</Link>
           <hr className="mobile-divider" />
-          <Link to="/profile" className="mobile-nav-link" onClick={() => setIsMenuOpen(false)}>Profile</Link>
-          <Link to="/settings" className="mobile-nav-link" onClick={() => setIsMenuOpen(false)}>Settings</Link>
-          <button onClick={handleLogout} className="mobile-logout-btn">Logout</button>
+          
+          {/* Mobile menu items based on authentication */}
+          {isAuthenticated ? (
+            <>
+              <Link to="/profile" className="mobile-nav-link" onClick={() => setIsMenuOpen(false)}>📄 Profile</Link>
+              <Link to="/settings" className="mobile-nav-link" onClick={() => setIsMenuOpen(false)}>⚙️ Settings</Link>
+              <Link to="/dashboard" className="mobile-nav-link" onClick={() => setIsMenuOpen(false)}>📊 Dashboard</Link>
+              <button onClick={() => {
+                handleLogout();
+                setIsMenuOpen(false);
+              }} className="mobile-logout-btn">🚪 Logout</button>
+            </>
+          ) : (
+            <>
+              <Link to="/signin" className="mobile-nav-link" onClick={() => setIsMenuOpen(false)}>🔐 Login</Link>
+              <Link to="/register" className="mobile-nav-link" onClick={() => setIsMenuOpen(false)}>📝 Register</Link>
+            </>
+          )}
         </div>
       )}
     </nav>
