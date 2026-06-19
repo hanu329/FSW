@@ -52,11 +52,11 @@ let token = localStorage.getItem("token");
 },[])
   
   console.log("user22",user)
-  const handleLogout = () => {
+const handleLogout = () => {
     localStorage.removeItem('token');
     navigate('/');
-  };
-
+    window.location.reload();
+};
   return (
     <nav className="navbar">
       <div className="navbar-container">
